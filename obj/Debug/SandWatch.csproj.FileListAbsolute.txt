@@ -1,0 +1,8 @@
+C:\Users\abmu\source\repos\SandWatch\SandWatch\bin\Debug\SandWatch.exe.config
+C:\Users\abmu\source\repos\SandWatch\SandWatch\bin\Debug\SandWatch.exe
+C:\Users\abmu\source\repos\SandWatch\SandWatch\bin\Debug\SandWatch.pdb
+C:\Users\abmu\source\repos\SandWatch\SandWatch\bin\Debug\AmazedSaint.Elastic.dll
+C:\Users\abmu\source\repos\SandWatch\SandWatch\obj\Debug\SandWatch.csprojResolveAssemblyReference.cache
+C:\Users\abmu\source\repos\SandWatch\SandWatch\obj\Debug\SandWatch.csproj.CoreCompileInputs.cache
+C:\Users\abmu\source\repos\SandWatch\SandWatch\obj\Debug\SandWatch.exe
+C:\Users\abmu\source\repos\SandWatch\SandWatch\obj\Debug\SandWatch.pdb

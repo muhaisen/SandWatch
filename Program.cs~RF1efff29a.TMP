@@ -1,0 +1,40 @@
+﻿using AmazedSaint.Elastic;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace SandWatch
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+ 
+               var cl = new WebClient();
+            Console.WriteLine("Reading public time line");
+            using (var r = new StreamReader
+                (cl.OpenRead(@"c:\abc.xml")))
+            {
+                var data = r.ReadToEnd();
+                IterateTweets(data);
+            }
+            Console.ReadLine();
+
+        }
+
+        static void IterateTweets(string data)
+        {
+            dynamic root = XElement.Parse(data).ToElastic();
+            foreach (var s in root["status"])
+            {
+                Console.WriteLine(~s.user.screen_name + " - " + ~s.text);
+                Console.WriteLine();
+            }
+        }
+    }
+}
