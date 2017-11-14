@@ -38,7 +38,7 @@ namespace SandWatch
             var idk = doc.GetElementsByTagName("con:operation");
             string returnTxt =   PrintAll(idk);
             WriteItDown(returnTxt);
-            var tst =  doc.ChildNodes[1].ChildNodes[1].ChildNodes[3].ChildNodes[1];
+            //var tst =  doc.ChildNodes[1].ChildNodes[1].ChildNodes[3].ChildNodes[1];
 
         }
         static string PrintAll(XmlNodeList XmlList) {
