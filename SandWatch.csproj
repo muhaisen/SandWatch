@@ -35,6 +35,9 @@
     <Reference Include="AmazedSaint.Elastic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AmazedSaint.ElasticObject.1.2.0\lib\net40\AmazedSaint.Elastic.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElasticDemoGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ISoapReader.cs" />
+    <Compile Include="Models\SoapHeaders.cs" />
+    <Compile Include="Models\SoapReader.cs" />
+    <Compile Include="Models\SoapBody.cs" />
+    <Compile Include="Models\SoapUiUrl.cs" />
+    <Compile Include="Models\SoapUiInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

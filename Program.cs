@@ -1,4 +1,5 @@
 ﻿using AmazedSaint.Elastic;
+using SandWatch.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,8 @@ namespace SandWatch
 {
     class Program
     {
+        static SoapReader _sr = new SoapReader();
+
         static void Main(string[] args)
         {
  
@@ -33,6 +36,9 @@ namespace SandWatch
             doc.Load(@"C:\DiamondWebService.xml");
             //doc.Load(@"C:\AWS.xml");
 
+           var Result =  _sr.GetInfo(doc);
+
+
             string xmlcontents = doc.InnerXml;
 
             var idk = doc.GetElementsByTagName("con:operation");
@@ -44,6 +50,12 @@ namespace SandWatch
         static string PrintAll(XmlNodeList XmlList) {
             string AllText = "";
             foreach (XmlNode item in XmlList) {
+                /////////////////
+                var nodeName = _sr.GetOperatiomName(item);
+                var a = _sr.GetURI(item);
+                var ab = _sr.GetHeaders(item);
+                var ac = _sr.GetSoapBody(item);
+                ////////////////
                 var call = item["con:call"];
 
                string Req = call["con:request"].InnerXml;
