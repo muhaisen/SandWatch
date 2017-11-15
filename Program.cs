@@ -88,16 +88,10 @@ namespace SandWatch
         static void ToJson(XmlDocument Doc, List<Item> Operations)
         {
             SoapUiInfo info = _sr.GetInfo(Doc);
-            JObject o = JObject.FromObject(new
+        
+            JObject m = JObject.FromObject(new
             {
-                variables = new List<String>(),
-                info = new {
-                    name = info.Name,
-                    _postman_id = info.PostmanId,
-                    description = info.Description,
-                    schema = info.Schema,
-                },
-                    item =
+                item =
              from p in Operations            
              select new
              {
@@ -114,6 +108,33 @@ namespace SandWatch
              }
             });
 
+            JObject o = JObject.FromObject(new
+            {
+                variables = new List<String>(),
+                info = new
+                {
+                    name = info.Name,
+                    _postman_id = info.PostmanId,
+                    description = info.Description,
+                    schema = info.Schema,
+                },
+                    item =
+             from p in Operations
+             select new
+             {
+                 name = p.name,
+                 request = new
+                 {
+                     url = p.request.url,
+                     method = p.request.method,
+                     ////// Headers
+                     header = from h in p.request.header select new { key = h.key, value = h.value, description = "" },
+                     body = new { mode = p.request.body.mode, raw = p.request.body.Raw },
+                     description = "",
+                 },
+                 response = new List<String>(),
+             }                
+            });
             WriteItDown(o.ToString());
         }
     }
