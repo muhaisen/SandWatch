@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SandWatch.Models
 {
-    public class SoapBody
+    public class Item
     {
-        public string Raw { get; set; }
-        public string mode { get; set; }
-
+        public string name { get; set; }
+        public Request request { get; set; }
+        public List<object> response { get; set; }
     }
 }

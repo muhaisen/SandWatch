@@ -15,12 +15,12 @@ namespace SandWatch.Models
             return NodeName;
         }
         
-        public List<SoapHeaders> GetHeaders(XmlNode node)
+        public List<SoapHeader> GetHeaders(XmlNode node)
         {
-            List<SoapHeaders> Headers = new List<SoapHeaders>();
+            List<SoapHeader> Headers = new List<SoapHeader>();
             string soapAction = GetHeader(node,"");
-            Headers.Add(new SoapHeaders() { description = "", key = "Content-Type", value = "text/xml" });
-            Headers.Add(new SoapHeaders() { description = "", key = "SOAPAction", value = soapAction });
+            Headers.Add(new SoapHeader() { description = "", key = "Content-Type", value = "text/xml" });
+            Headers.Add(new SoapHeader() { description = "", key = "SOAPAction", value = soapAction });
             return Headers;
         }
 

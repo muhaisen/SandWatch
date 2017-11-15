@@ -54,7 +54,10 @@
       <DependentUpon>ElasticDemoGen.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ISoapReader.cs" />
-    <Compile Include="Models\SoapHeaders.cs" />
+    <Compile Include="Models\item.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\RootObeject.cs" />
+    <Compile Include="Models\SoapHeader.cs" />
     <Compile Include="Models\SoapReader.cs" />
     <Compile Include="Models\SoapBody.cs" />
     <Compile Include="Models\SoapUiUrl.cs" />

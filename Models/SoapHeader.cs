@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SandWatch.Models
 {
-    class SoapHeaders
+    public class SoapHeader
     {
         public string key { get; set; }
         public string value { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AmazedSaint.Elastic;
+using Newtonsoft.Json.Linq;
 using SandWatch.Models;
 using System;
 using System.Collections.Generic;
@@ -42,37 +43,39 @@ namespace SandWatch
             string xmlcontents = doc.InnerXml;
 
             var idk = doc.GetElementsByTagName("con:operation");
-            string returnTxt =   PrintAll(idk);
-            WriteItDown(returnTxt);
+            var returnTxt =   PrintAll(idk);
+            ToJson(doc,returnTxt);
+            //WriteItDown(returnTxt);
             //var tst =  doc.ChildNodes[1].ChildNodes[1].ChildNodes[3].ChildNodes[1];
 
         }
-        static string PrintAll(XmlNodeList XmlList) {
-            string AllText = "";
+        static List<Item> PrintAll(XmlNodeList XmlList) {
+            List<Item> Items = new List<Item>();
             foreach (XmlNode item in XmlList) {
-                /////////////////
-                var nodeName = _sr.GetOperatiomName(item);
-                var a = _sr.GetURI(item);
-                var ab = _sr.GetHeaders(item);
-                var ac = _sr.GetSoapBody(item);
-                ////////////////
-                var call = item["con:call"];
-
-               string Req = call["con:request"].InnerXml;
-                string endpoint = call["con:endpoint"].InnerXml;
-
-                int ends = Req.Length - 12;
-                System.Diagnostics.Debug.WriteLine(endpoint);
-
-                Req = Req.Substring(9, ends);
-                Req = Req.Replace("\\r", "\\r\\n");
-
-
-                AllText += endpoint + Environment.NewLine;
-                AllText += Req + Environment.NewLine;
-
+                //////////////// Intitalize variables ////////
+                Item VOitem = new Item();
+                Request request = new Request();
+                SoapBody Body = new SoapBody();
+                List<SoapHeader> SoapHeaders = new List<SoapHeader>();
+                ////////// Getting operation name ///////////
+                VOitem.name = _sr.GetOperatiomName(item);
+                ////////// Filling the request //////////////
+                request.url = _sr.GetURI(item);
+                request.method = "POST";
+                request.description = "";
+                ////// Filling the request body /////////////
+                Body = _sr.GetSoapBody(item);
+                ///// Filling the request  headers ////////
+                SoapHeaders = _sr.GetHeaders(item);
+                //////// Adding the header and body  the request
+                request.header = SoapHeaders;
+                request.body = Body;
+                ///// Adding request to the item ///////////
+                VOitem.request = request;
+                VOitem.response = null;
+                Items.Add(VOitem);
             }
-            return AllText;
+            return Items;
         }
         static void WriteItDown(string TheText) {
             string path = @"C:\Users\abmu\Desktop\lol.json";
@@ -81,6 +84,37 @@ namespace SandWatch
                 File.WriteAllText(path, TheText);
             }
              File.AppendAllText(path, TheText);
+        }
+        static void ToJson(XmlDocument Doc, List<Item> Operations)
+        {
+            SoapUiInfo info = _sr.GetInfo(Doc);
+            JObject o = JObject.FromObject(new
+            {
+                variables = new List<String>(),
+                info = new {
+                    name = info.Name,
+                    _postman_id = info.PostmanId,
+                    description = info.Description,
+                    schema = info.Schema,
+                },
+                    item =
+             from p in Operations            
+             select new
+             {
+                 name = p.name,
+                 request = new {
+                     url = p.request.url,
+                     method = p.request.method,
+                     ////// Headers
+                     header = from h in p.request.header select new { key=h.key, value=h.value, description="" },
+                     body = new { mode=p.request.body.mode,raw= p.request.body.Raw },
+                     description="",
+                 },
+                 response = new List<String>(),
+             }
+            });
+
+            WriteItDown(o.ToString());
         }
     }
 }

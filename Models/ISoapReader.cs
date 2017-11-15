@@ -12,7 +12,7 @@ namespace SandWatch.Models
         SoapUiInfo GetInfo(XmlDocument doc);
         string GetOperatiomName(XmlNode node);
         string GetURI(XmlNode node);
-        List<SoapHeaders> GetHeaders(XmlNode node);
+        List<SoapHeader> GetHeaders(XmlNode node);
         List<string> GetHost(XmlDocument doc);
         List<string> GetPath(XmlDocument doc);
         List<string> GetQuery(XmlDocument doc);
