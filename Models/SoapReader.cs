@@ -9,18 +9,22 @@ namespace SandWatch.Models
 {
     class SoapReader : ISoapReader
     {
+        static Constant _contstat;
+        public SoapReader() {
+            _contstat = new Constant();
+        }
         private string GetHeader(XmlNode node,string nodeName)
         {
-            string NodeName = node.Attributes["action"].Value;
+            string NodeName = node.Attributes[_contstat.Action].Value;
             return NodeName;
         }
         
         public List<SoapHeader> GetHeaders(XmlNode node)
         {
             List<SoapHeader> Headers = new List<SoapHeader>();
-            string soapAction = GetHeader(node,"");
-            Headers.Add(new SoapHeader() { description = "", key = "Content-Type", value = "text/xml" });
-            Headers.Add(new SoapHeader() { description = "", key = "SOAPAction", value = soapAction });
+            string soapAction = GetHeader(node, String.Empty);
+            Headers.Add(new SoapHeader() { description = String.Empty, key = _contstat.ContentType, value = _contstat.TextXML });
+            Headers.Add(new SoapHeader() { description = String.Empty, key = _contstat.SOAPAction, value = soapAction });
             return Headers;
         }
 
@@ -33,17 +37,17 @@ namespace SandWatch.Models
         {
             SoapUiInfo Info = new SoapUiInfo();
             //con:soapui-project
-           var SoapUiProject = doc.GetElementsByTagName("con:soapui-project");
-            Info.Name = SoapUiProject[0].Attributes["name"].Value;
+           var SoapUiProject = doc.GetElementsByTagName(_contstat.SoapuiProject);
+            Info.Name = SoapUiProject[0].Attributes[_contstat.Name].Value;
             Info.PostmanId = Guid.NewGuid().ToString();
-            Info.Description = "";
-            Info.Schema = "https://schema.getpostman.com/json/collection/v2.0.0/collection.json";
+            Info.Description = String.Empty;
+            Info.Schema = _contstat.PostmanSchema;
             return Info;
         }
 
         public string GetOperatiomName(XmlNode node)
         {
-            string NodeName = node.Attributes["name"].Value;
+            string NodeName = node.Attributes[_contstat.Name].Value;
             return NodeName;
 
         }
@@ -61,38 +65,38 @@ namespace SandWatch.Models
         public SoapBody GetSoapBody(XmlNode node)
         {
             SoapBody Body = new SoapBody();
-            Body.mode = "raw";
+            Body.mode = _contstat.Raw;
             Body.Raw = GetSoapRawBody(node);
             return Body;
 
         }
         private string GetSoapRawBody(XmlNode node) {
             //con:request
-            node = node["con:call"];
-            string Body = node["con:request"].InnerXml;
+            node = node[_contstat.Call];
+            string Body = node[_contstat.Request].InnerXml;
             Body = SoapRequestTailor(Body);
 
             return Body;
         }
         private string SoapRequestTailor(string Request) {
 
-            int ends = Request.Length - 12;
-            Request = Request.Substring(9, ends);
-            Request = Request.Replace("\\r", "\\r\\n");
-            //System.Diagnostics.Debug.WriteLine(Request);
+            int ends = Request.Length - _contstat.EndCharachtarsToSkip;
+            Request = Request.Substring(_contstat.StartCharachtarsToSkip, ends);
+            //  Replace SoapUi Newline to Postman Newline.
+            Request = Request.Replace(_contstat.SoapUINewLine, _contstat.PostmanNewLine);
             return Request;
 
         }
         public string GetURI(XmlNode node)
         {
             //con:endpoint con:call
-            node = node["con:call"];
-            string Endpoint = node["con:endpoint"].InnerXml;
+            node = node[_contstat.Call];
+            string Endpoint = node[_contstat.Endpoint].InnerXml;
             return Endpoint;
         }
         private XmlNodeList GetListOfOperations(XmlDocument doc) {
             // To Delete.
-           return doc.GetElementsByTagName("");
+           return doc.GetElementsByTagName(String.Empty);
         }
     }
 }

@@ -53,6 +53,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElasticDemoGen.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Constant.cs" />
     <Compile Include="Models\ISoapReader.cs" />
     <Compile Include="Models\item.cs" />
     <Compile Include="Models\Request.cs" />
