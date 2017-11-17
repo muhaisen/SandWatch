@@ -37,12 +37,8 @@ namespace SandWatch
              XmlDocument doc = new XmlDocument();
             doc.Load(@"C:\DiamondWebService.xml");
 
-           var Result =  _sr.GetInfo(doc);
-
-
-            string xmlcontents = doc.InnerXml;
-
-            var idk = doc.GetElementsByTagName(_contstat.Operation);
+            var Result =  _sr.GetInfo(doc);
+            var idk = _sr.GetAllOperations(doc);
             var returnTxt =   PrintAll(idk);
             ToJson(doc,returnTxt);
             //WriteItDown(returnTxt);
@@ -52,25 +48,37 @@ namespace SandWatch
         static List<Item> PrintAll(XmlNodeList XmlList) {
             List<Item> Items = new List<Item>();
             foreach (XmlNode item in XmlList) {
-                //////////////// Intitalize variables ////////
+                //Intitalize variables 
                 Item VOitem = new Item();
                 Request request = new Request();
                 SoapBody Body = new SoapBody();
                 List<SoapHeader> SoapHeaders = new List<SoapHeader>();
-                ////////// Getting operation name ///////////
-                VOitem.name = _sr.GetOperatiomName(item);
-                ////////// Filling the request //////////////
+
+
+                //Getting operation name 
+                VOitem.name = _sr.GetOperationName(item);
+
+
+                //Filling the request 
                 request.url = _sr.GetURI(item);
                 request.method = _contstat.Post;
                 request.description = "";
-                ////// Filling the request body /////////////
+
+
+                //Filling the request body 
                 Body = _sr.GetSoapBody(item);
-                ///// Filling the request  headers ////////
+
+
+                //Filling the request  headers
                 SoapHeaders = _sr.GetHeaders(item);
-                //////// Adding the header and body  the request
+
+
+                //Adding the header and body  the request
                 request.header = SoapHeaders;
                 request.body = Body;
-                ///// Adding request to the item ///////////
+
+
+                //Adding request to the item
                 VOitem.request = request;
                 VOitem.response = null;
                 Items.Add(VOitem);
