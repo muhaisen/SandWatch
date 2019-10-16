@@ -1,0 +1,31 @@
+So, the security requirement for your application is kinda unique and you need to meet this. However, I beleive JWT is not the best way to handle these requiremens. 
+JWT, Refresh token were made to suit the needs for Oauth protocol (and OpenId Connect) rathen than the means you are using it today in your application. 
+
+A JWT can be used for stateless authentication. It contains the ID of the user and authorization grants, but more importantly, it contains a cryptographic hash which proves the legitimacy of the token. 
+Because stateful authentication uses a session, in this sense JWT can be confused for a session in that it is used for authentication. You are trying to use JWT to maintain the session events (Such as idle time to expire the session)
+JWT is not good enogh for this scenario, you can easily invalidate their refresh tokens but the access token (JWT) is a little trickier as it's validity is largely 
+determined by the signing key on the server which obviously we don't want to tinker with. For this reason the Refresh toekn, JWT iteself is not enough to fullfill the security requirements. You have to aither use token-based
+authentication to maintain the session (As i mentioned the bank example). OR  you have to tweak the JWT/ Refresh token a little bit to make mapping in the database (If you don't want to get a rid of JWT and use token-based)
+The idea is to create a table to save the relation mapping each Refresh token to the JWT ID claim (jti). In this case you have to validate each JWT request against this table to make sure that the Refresh token is still valid.
+
+
++----+--------------------------------------+--------------------------------------+
+| ID |             RefreshToken             |                 JWT                  |
++----+--------------------------------------+--------------------------------------+
+|  1 | e8f4ea4b-5c23-42d3-b5e5-028e969f537e | b160b11b-044e-4875-954d-7a9221caad29 |
+|  2 | e8f4ea4b-5c23-42d3-b5e5-028e969f537e | 5414c228-dcb4-40fe-8b5d-1c343bacd735 |
+|  3 | d3fc2a2d-ca32-452f-afa0-20bb89a6251b | 377c8031-ff94-48d2-bc15-b4963d6958e5 |
++----+--------------------------------------+--------------------------------------+
+
+
+
+Indeed, storing all issued JWT IDs undermines the stateless nature of using JWTs. However, the purpose of JWT IDs is to be able to revoke previously-issued JWTs. This can most easily be achieved.
+If you've included the "exp" claim (you should), then you can eventually clean up blacklisted JWTs as they expire naturally. Of course you can implement other revocation options alongside (e.g. revoke all tokens of one client based on a combination of "iat" and "aud").
+
+
+Reading list:
+
+http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
+http://cryto.net/~joepie91/blog/2016/06/19/stop-using-jwt-for-sessions-part-2-why-your-solution-doesnt-work/
+https://www.reddit.com/r/programming/comments/9taip1/stop_using_jwt_for_sessions/
+https://medium.com/soundstripe-engineering/stateful-sessions-with-json-web-tokens-74b5c08c013e
