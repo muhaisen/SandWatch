@@ -39,3 +39,11 @@ https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
 https://stackoverflow.com/questions/37507714/invalidating-client-side-jwt-session
 
 To be continued.. where to save your Refresh token?
+You have few options: 
+1- Trust the client ( Mobile App, javaScript-based app) to save the refresh token localy such as in the local storage or 
+session storage (in HTML5) since it is just a short window (30 minutes).
+In this case to provide more trust in your front-end application, they have to implement a layer of obfuscation
+not to save the refresh token in plain-text. 
+
+2- Use Token-based authentication and session management, define your sliding session interval and increment it as you recieve
+each request (bank style security)
