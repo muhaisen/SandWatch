@@ -16,7 +16,7 @@ In this scenario, you will secure the both sides but you will face a quiet high 
  It's up to you to decide. 
 
 +----+--------------------------------------+--------------------------------------+
-| ID |             RefreshToken             |                 JWT                  |
+| ID |             RefreshToken             |                 JWT_ID               |
 +----+--------------------------------------+--------------------------------------+
 |  1 | e8f4ea4b-5c23-42d3-b5e5-028e969f537e | b160b11b-044e-4875-954d-7a9221caad29 |
 |  2 | e8f4ea4b-5c23-42d3-b5e5-028e969f537e | 5414c228-dcb4-40fe-8b5d-1c343bacd735 |
@@ -37,3 +37,5 @@ https://www.reddit.com/r/programming/comments/9taip1/stop_using_jwt_for_sessions
 https://medium.com/soundstripe-engineering/stateful-sessions-with-json-web-tokens-74b5c08c013e
 https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
 https://stackoverflow.com/questions/37507714/invalidating-client-side-jwt-session
+
+To be continued.. where to save your Refresh token?
