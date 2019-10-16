@@ -7,7 +7,13 @@ JWT is not good enogh for this scenario, you can easily invalidate their refresh
 determined by the signing key on the server which obviously we don't want to tinker with. For this reason the Refresh toekn, JWT iteself is not enough to fullfill the security requirements. You have to aither use token-based
 authentication to maintain the session (As i mentioned the bank example). OR  you have to tweak the JWT/ Refresh token a little bit to make mapping in the database (If you don't want to get a rid of JWT and use token-based)
 The idea is to create a table to save the relation mapping each Refresh token to the JWT ID claim (jti). In this case you have to validate each JWT request against this table to make sure that the Refresh token is still valid.
+This is in case of user signout. In the same time make the JWT short-lived (Ex. 30 seconds) to avoid the accidental intruder probability. 
 
+In this scenario, you will secure the both sides but you will face a quiet high load on the backend system from the database queries
+- Validate database on each request  
+- Create new JWT each 30 seconds and save the id
+ Please check the last link down for more detailed guide. 
+ It's up to you to decide. 
 
 +----+--------------------------------------+--------------------------------------+
 | ID |             RefreshToken             |                 JWT                  |
@@ -22,10 +28,12 @@ The idea is to create a table to save the relation mapping each Refresh token to
 Indeed, storing all issued JWT IDs undermines the stateless nature of using JWTs. However, the purpose of JWT IDs is to be able to revoke previously-issued JWTs. This can most easily be achieved.
 If you've included the "exp" claim (you should), then you can eventually clean up blacklisted JWTs as they expire naturally. Of course you can implement other revocation options alongside (e.g. revoke all tokens of one client based on a combination of "iat" and "aud").
 
+P.S. what you are to acheive is called (Sliding sessions) so it is session management responsability :D 
 
 Reading list:
-
 http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
 http://cryto.net/~joepie91/blog/2016/06/19/stop-using-jwt-for-sessions-part-2-why-your-solution-doesnt-work/
 https://www.reddit.com/r/programming/comments/9taip1/stop_using_jwt_for_sessions/
 https://medium.com/soundstripe-engineering/stateful-sessions-with-json-web-tokens-74b5c08c013e
+https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
+https://stackoverflow.com/questions/37507714/invalidating-client-side-jwt-session
